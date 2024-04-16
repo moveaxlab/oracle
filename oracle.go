@@ -49,13 +49,13 @@ func BuildUrl(server string, port int, service, user, password string, options m
 			for _, temp := range strings.Split(val, ",") {
 				temp = strings.TrimSpace(temp)
 				if strings.ToUpper(key) == "SERVER" {
-					ret += fmt.Sprintf("%s=%s&", key, temp)
+					opts = append(opts, fmt.Sprintf("%s=%s", key, temp))
 				} else {
-					ret += fmt.Sprintf("%s=%s&", key, url.QueryEscape(temp))
+					opts = append(opts, fmt.Sprintf("%s=%s", key, url.QueryEscape(temp)))
 				}
 			}
 		}
-		ret += "?" + strings.Join(opts, "&")
+		ret = fmt.Sprintf("%s?%s", ret, strings.Join(opts, "&"))
 	}
 	return ret
 }
