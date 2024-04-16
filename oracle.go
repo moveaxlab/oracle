@@ -3,6 +3,8 @@ package oracle
 import (
 	"database/sql"
 	"fmt"
+	"net"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -28,6 +30,34 @@ type Config struct {
 
 type Dialector struct {
 	*Config
+}
+
+// BuildUrl create databaseURL from server, port, service, user, password, urlOptions
+// this function help build a will formed databaseURL and accept any character as it
+// convert special charters to corresponding values in URL
+func BuildUrl(server string, port int, service, user, password string, options map[string]string) string {
+	ret := fmt.Sprintf(
+		"oracle://%s:%s@%s/%s",
+		url.PathEscape(user),
+		url.PathEscape(password),
+		net.JoinHostPort(server, strconv.Itoa(port)),
+		url.PathEscape(service),
+	)
+	if options != nil {
+		opts := make([]string, 0)
+		for key, val := range options {
+			for _, temp := range strings.Split(val, ",") {
+				temp = strings.TrimSpace(temp)
+				if strings.ToUpper(key) == "SERVER" {
+					ret += fmt.Sprintf("%s=%s&", key, temp)
+				} else {
+					ret += fmt.Sprintf("%s=%s&", key, url.QueryEscape(temp))
+				}
+			}
+		}
+		ret += "?" + strings.Join(opts, "&")
+	}
+	return ret
 }
 
 func Open(dsn string) gorm.Dialector {
