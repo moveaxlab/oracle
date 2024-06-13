@@ -16,7 +16,7 @@ forked from [CengSin/oracle](https://github.com/CengSin/oracle).
 ### how to install 
 
 ```bash
-go get github.com/cengsin/oracle
+go get github.com/moveaxlab/oracle
 ```
 
 ###  usage
@@ -24,7 +24,7 @@ go get github.com/cengsin/oracle
 ```go
 import (
 	"fmt"
-	"github.com/cengsin/oracle"
+	"github.com/moveaxlab/oracle"
 	"gorm.io/gorm"
 	"log"
 )

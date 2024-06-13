@@ -1,4 +1,4 @@
-module github.com/cengsin/oracle
+module github.com/moveaxlab/oracle
 
 go 1.21
 
