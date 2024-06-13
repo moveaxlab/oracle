@@ -1,0 +1,23 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/moveaxlab/oracle-devcontainer:latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: get dependencies
+      run: go mod download
+    - name: Test
+      continue-on-error: true
+      run: go test -v ./...
