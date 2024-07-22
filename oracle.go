@@ -166,15 +166,7 @@ var numericPlaceholder = regexp.MustCompile(`:(\d+)`)
 
 func (d Dialector) Explain(sql string, vars ...interface{}) string {
 	return logger.ExplainSQL(sql, numericPlaceholder, `'`, funk.Map(vars, func(v interface{}) interface{} {
-		switch v := v.(type) {
-		case bool:
-			if v {
-				return 1
-			}
-			return 0
-		default:
-			return v
-		}
+		return v
 	}).([]interface{})...)
 }
 
@@ -186,7 +178,9 @@ func (d Dialector) DataTypeOf(field *schema.Field) string {
 	var sqlType string
 
 	switch field.DataType {
-	case schema.Bool, schema.Int, schema.Uint, schema.Float:
+	case schema.Bool:
+		sqlType = "VARCHAR2(5)"
+	case schema.Int, schema.Uint, schema.Float:
 		sqlType = "INTEGER"
 
 		switch {
